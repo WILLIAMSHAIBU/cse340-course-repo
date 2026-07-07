@@ -1,11 +1,21 @@
-<%- include('partials/header', { title: 'Projects' }) %>
+<%- include('partials/header', { title }) %>
 
 <main>
     <h2>Upcoming Service Projects</h2>
     <ul>
-        <li>Park Cleanup - Join us to clean up local parks and make them beautiful!</li>
-        <li>Food Drive - Help collect and distribute food to those in need.</li>
-        <li>Community Tutoring - Volunteer to tutor students in various subjects.</li>
+        <% service_projects.forEach(project => { %>
+            <li>
+                <strong><%= project.title %></strong> - <%= project.description %>
+                <% if (project.location) { %>
+                    <br>
+                    <span>Location: <%= project.location %></span>
+                <% } %>
+                <% if (project.project_date) { %>
+                    <br>
+                    <span>Date: <%= new Date(project.project_date).toLocaleDateString() %></span>
+                <% } %>
+            </li>
+        <% }); %>
     </ul>
 </main>
 
