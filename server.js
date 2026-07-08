@@ -64,5 +64,6 @@ app.listen(PORT, async () => {
     console.log(`Environment: ${NODE_ENV}`);
   } catch (error) {
     console.error('Error connecting to the database:', error);
+    console.log('Continuing without database connection for now.');
   }
 });
