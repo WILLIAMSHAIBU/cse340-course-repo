@@ -1,6 +1,4 @@
--- ========================================
--- Organization Table
--- ========================================
+
 CREATE TABLE organization (
     organization_id SERIAL PRIMARY KEY,
     name VARCHAR(150) NOT NULL,
@@ -38,7 +36,7 @@ VALUES
 SELECT * FROM organization;
 
 DELETE FROM organization
-WHERE name = 'BrightFuture Builders';
+WHERE name = 'GreenHarvest Growers';
 
 CREATE TABLE service_project (
     project_id SERIAL PRIMARY KEY,
@@ -50,27 +48,6 @@ CREATE TABLE service_project (
     CONSTRAINT fk_organization
         FOREIGN KEY (organization_id)
         REFERENCES organization(organization_id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
-);
-
-CREATE TABLE category (
-    category_id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE
-);
-
-CREATE TABLE project_category (
-    project_id INT NOT NULL,
-    category_id INT NOT NULL,
-    PRIMARY KEY (project_id, category_id),
-    CONSTRAINT fk_project
-        FOREIGN KEY (project_id)
-        REFERENCES service_project(project_id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    CONSTRAINT fk_category
-        FOREIGN KEY (category_id)
-        REFERENCES category(category_id)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
@@ -128,22 +105,18 @@ VALUES
     '2026-09-18'
 );
 
-INSERT INTO category (name) VALUES
-('Environmental'),
-('Educational'),
-('Community Service'),
-('Health and Wellness');
 
-INSERT INTO project_category (project_id, category_id)
-SELECT sp.project_id, c.category_id
-FROM service_project sp
-JOIN category c ON c.name IN ('Environmental', 'Educational', 'Community Service', 'Health and Wellness')
-WHERE sp.title IN (
-    'Community School Renovation',
-    'Village Water Well Construction',
-    'Community Vegetable Garden',
-    'Urban Tree Planting Campaign',
-    'Neighborhood Cleanup Day',
-    'Food Donation Drive'
+CREATE TABLE category (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
 );
 
+
+INSERT INTO category (name)
+VALUES
+    ('Educational'),
+    ('Community Service'),
+    ('Health and wellness'),
+    ('Environment');
+
+SELECT * FROM category;
