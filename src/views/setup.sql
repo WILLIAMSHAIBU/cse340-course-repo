@@ -147,27 +147,3 @@ WHERE sp.title IN (
     'Food Donation Drive'
 );
 
--- Assign categories more meaningfully per project
-UPDATE project_category
-SET category_id = (SELECT category_id FROM category WHERE name = 'Educational')
-WHERE project_id = 1;
-
-UPDATE project_category
-SET category_id = (SELECT category_id FROM category WHERE name = 'Health and Wellness')
-WHERE project_id = 2;
-
-UPDATE project_category
-SET category_id = (SELECT category_id FROM category WHERE name = 'Environmental')
-WHERE project_id = 3;
-
-UPDATE project_category
-SET category_id = (SELECT category_id FROM category WHERE name = 'Environmental')
-WHERE project_id = 4;
-
-UPDATE project_category
-SET category_id = (SELECT category_id FROM category WHERE name = 'Community Service')
-WHERE project_id = 5;
-
-UPDATE project_category
-SET category_id = (SELECT category_id FROM category WHERE name = 'Community Service')
-WHERE project_id = 6;
