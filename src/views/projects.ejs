@@ -5,7 +5,7 @@
     <ul>
         <% service_projects.forEach(project => { %>
             <li>
-                <strong><%= project.title %></strong> - <%= project.description %>
+                <a href="/project/<%= project.project_id %>"><strong><%= project.title %></strong></a> - <%= project.description %>
                 <% if (project.location) { %>
                     <br>
                     <span>Location: <%= project.location %></span>

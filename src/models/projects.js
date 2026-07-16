@@ -17,10 +17,10 @@ const getProjectsByOrganizationId = async (organizationId) => {
           title,
           description,
           location,
-          date
-        FROM project
+          project_date
+        FROM service_project
         WHERE organization_id = $1
-        ORDER BY date;
+        ORDER BY project_date;
       `;
       
     const queryParams = [organizationId];
