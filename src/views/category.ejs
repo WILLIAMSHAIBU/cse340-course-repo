@@ -2,16 +2,15 @@
 <main>
     <h2><%= title %></h2>
 
-    <h3><%= organizationDetails.name %></h3>
-    <img src="/images/<%= organizationDetails.logo_filename %>" alt="<%= organizationDetails.name %> logo">
+    <h3><%= categoryDetails.name %></h3>
 
-    <p>Description: <%= organizationDetails.description %></p>
-
-    <h3>Service Projects</h3>
+    <h3>Projects</h3>
     <ul>
         <% projects.forEach(project => { %>
             <li><a href="/project/<%= project.project_id %>"><%= project.title %></a></li>
         <% }) %>
     </ul>
+
+    <p><a href="/categories">Back to all categories</a></p>
 </main>
 <%- include('partials/footer') %>

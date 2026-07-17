@@ -120,3 +120,32 @@ VALUES
     ('Environment');
 
 SELECT * FROM category;
+
+CREATE TABLE project_category (
+    project_id INT NOT NULL,
+    category_id INT NOT NULL,
+    PRIMARY KEY (project_id, category_id),
+    CONSTRAINT fk_project
+        FOREIGN KEY (project_id)
+        REFERENCES service_project(project_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT fk_category
+        FOREIGN KEY (category_id)
+        REFERENCES category(category_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+INSERT INTO project_category (project_id, category_id)
+VALUES
+    (1, 1),
+    (1, 2),
+    (2, 2),
+    (3, 2),
+    (3, 4),
+    (4, 4),
+    (5, 2),
+    (6, 2);
+
+SELECT * FROM project_category;
