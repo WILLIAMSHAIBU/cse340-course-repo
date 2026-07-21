@@ -1,7 +1,7 @@
 import { getAllCategories, getCategoryDetails, getProjectsByCategoryId, updateCategoryAssignments } from '../models/categories.js';
 import { getProjectDetails, getCategoriesByProjectId } from '../models/projects.js';
 
-export const showCategoriesPage = async (req, res) => {
+const showCategoriesPage = async (req, res) => {
     const title = 'Service Project Categories';
 
     try {
@@ -13,7 +13,7 @@ export const showCategoriesPage = async (req, res) => {
     }
 };
 
-export const showCategoryDetailsPage = async (req, res) => {
+const showCategoryDetailsPage = async (req, res) => {
     const categoryId = req.params.id;
     const categoryDetails = await getCategoryDetails(categoryId);
     const projects = await getProjectsByCategoryId(categoryId);
