@@ -28,8 +28,13 @@ const app = express();
 app.use(session({
     secret: SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 60 * 60 * 1000 } // Session expires after 1 hour of inactivity
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 60 * 60 * 1000, // Session expires after 1 hour of inactivity
+        secure: NODE_ENV === 'production', // Use secure cookies in production
+        httpOnly: true, // Prevent XSS attacks
+        sameSite: 'lax' // CSRF protection
+    }
 }));
 
 // Use flash message middleware
