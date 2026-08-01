@@ -2,18 +2,30 @@
 <main>
     <h2><%= title %></h2>
 
-    <h3><%= categoryDetails.name %></h3>
+    <div class="detail-header">
+        <div class="detail-info">
+            <h3><%= categoryDetails.name %></h3>
+        </div>
+    </div>
 
-    <h3>Projects</h3>
-    <ul>
-        <% projects.forEach(project => { %>
-            <li><a href="/project/<%= project.project_id %>"><%= project.title %></a></li>
-        <% }) %>
-    </ul>
+    <div class="detail-section">
+        <h4>Projects</h4>
+        <% if (projects && projects.length > 0) { %>
+            <ul class="detail-list">
+                <% projects.forEach(project => { %>
+                    <li><a href="/project/<%= project.project_id %>"><%= project.title %></a></li>
+                <% }) %>
+            </ul>
+        <% } else { %>
+            <p class="empty-state">No projects in this category yet.</p>
+        <% } %>
+    </div>
 
-    <% if (user && user.role_name === 'admin') { %>
-        <p><a href="/edit-category/<%= categoryDetails.category_id %>">Edit Category</a></p>
-    <% } %>
-    <p><a href="/categories">Back to all categories</a></p>
+    <div class="detail-actions">
+        <% if (user && user.role_name === 'admin') { %>
+            <a href="/edit-category/<%= categoryDetails.category_id %>" class="btn-primary">Edit Category</a>
+        <% } %>
+        <a href="/categories" class="btn-secondary">Back to all categories</a>
+    </div>
 </main>
 <%- include('partials/footer') %>

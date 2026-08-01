@@ -3,9 +3,38 @@
 <main>
     <h1><%= title %></h1>
 
-    <h2>Dashboard</h2>
-    <p>Name: <%= name %></p>
-    <p>Username: <%= email %></p>
+    <div class="dashboard-card">
+        <div class="dashboard-header">
+            <div class="user-avatar">
+                <span class="avatar-initial"><%= name.charAt(0).toUpperCase() %></span>
+            </div>
+            <div class="user-info">
+                <h2>Welcome, <%= name %>!</h2>
+                <p class="user-email"><%= email %></p>
+                <span class="role-badge role-<%= user.role_name %>"><%= user.role_name %></span>
+            </div>
+        </div>
+
+        <% if (user && user.role_name === 'admin') { %>
+            <div class="dashboard-actions">
+                <h3>Admin Actions</h3>
+                <div class="action-buttons">
+                    <a href="/users" class="btn-action">
+                        <span class="action-icon">👥</span>
+                        <span class="action-text">View All Users</span>
+                    </a>
+                    <a href="/new-organization" class="btn-action">
+                        <span class="action-icon">🏢</span>
+                        <span class="action-text">Add Organization</span>
+                    </a>
+                    <a href="/new-project" class="btn-action">
+                        <span class="action-icon">📋</span>
+                        <span class="action-text">Add Project</span>
+                    </a>
+                </div>
+            </div>
+        <% } %>
+    </div>
 
 </main>
 

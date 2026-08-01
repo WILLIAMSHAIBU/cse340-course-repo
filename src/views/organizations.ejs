@@ -2,14 +2,22 @@
 <main>
     <h2><%= title %></h2>
 
-    <p>Here are a few of our partner organizations:</p>
-    <ul>
+    <p class="intro-text">Here are a few of our partner organizations:</p>
+    <div class="card-grid">
         <% organizations.forEach(organization => { %>
-            <li><img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo"><a href="/organization/<%= organization.organization_id %>"><%= organization.name %></a>: <%= organization.contact_email %></li>
+            <div class="card">
+                <img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo" class="card-logo">
+                <div class="card-content">
+                    <h3><a href="/organization/<%= organization.organization_id %>"><%= organization.name %></a></h3>
+                    <p class="card-email"><%= organization.contact_email %></p>
+                </div>
+            </div>
         <% }); %>
-    </ul>
+    </div>
     <% if (user && user.role_name === 'admin') { %>
-        <p><a href="/new-organization">Add a new organization</a></p>
+        <div class="admin-actions">
+            <a href="/new-organization" class="btn-primary">Add a new organization</a>
+        </div>
     <% } %>
 </main>
 

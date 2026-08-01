@@ -28,10 +28,26 @@
     <% const messages = flash(); %>
     <% Object.keys(messages).forEach(type => { %>
         <% if (messages[type].length > 0) { %>
-            <div class="alert <%= type %>">
+            <div class="alert <%= type %>" data-auto-hide>
                 <% messages[type].forEach(msg => { %>
                     <%= msg %>
                 <% }); %>
             </div>
         <% } %>
     <% }); %>
+
+    <script>
+        // Auto-hide flash messages after 3 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert[data-auto-hide]');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.style.transition = 'opacity 0.5s ease';
+                    alert.style.opacity = '0';
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 500);
+                }, 3000);
+            });
+        });
+    </script>

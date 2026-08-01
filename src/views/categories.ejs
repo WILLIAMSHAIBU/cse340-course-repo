@@ -2,13 +2,17 @@
 
 <main>
     <h2>Service Project Categories</h2>
-    <ul>
+    <div class="category-grid">
         <% categories.forEach(category => { %>
-            <li><a href="/category/<%= category.category_id %>"><%= category.name %></a></li>
+            <a href="/category/<%= category.category_id %>" class="category-card">
+                <h3><%= category.name %></h3>
+            </a>
         <% }); %>
-    </ul>
+    </div>
     <% if (user && user.role_name === 'admin') { %>
-        <p><a href="/new-category">Add a New Category</a></p>
+        <div class="admin-actions">
+            <a href="/new-category" class="btn-primary">Add a New Category</a>
+        </div>
     <% } %>
 </main>
 

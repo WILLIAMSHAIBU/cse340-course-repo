@@ -2,12 +2,29 @@
 <main>
     <h2><%= title %></h2>
 
-    <p>Registered Users:</p>
-    <ul>
-        <% users.forEach(user => { %>
-            <li><%= user.name %> - <%= user.email %> - Role: <%= user.role_name %></li>
-        <% }); %>
-    </ul>
+    <h3>Registered Users</h3>
+    <% if (users && users.length > 0) { %>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach(user => { %>
+                    <tr>
+                        <td><%= user.name %></td>
+                        <td><%= user.email %></td>
+                        <td><span class="role-badge role-<%= user.role_name %>"><%= user.role_name %></span></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>No users registered yet.</p>
+    <% } %>
 </main>
 
 <%- include('partials/footer') %>

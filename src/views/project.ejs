@@ -2,29 +2,40 @@
 <main>
     <h2><%= title %></h2>
 
-    <h3><%= projectDetails.title %></h3>
+    <div class="detail-header">
+        <div class="detail-info">
+            <h3><%= projectDetails.title %></h3>
+            <div class="detail-meta">
+                <% if (projectDetails.location) { %>
+                    <span class="meta-item">📍 <%= projectDetails.location %></span>
+                <% } %>
+                <% if (projectDetails.project_date) { %>
+                    <span class="meta-item">📅 <%= new Date(projectDetails.project_date).toLocaleDateString() %></span>
+                <% } %>
+            </div>
+        </div>
+    </div>
 
-    <p>Description: <%= projectDetails.description %></p>
+    <div class="detail-section">
+        <h4>Description</h4>
+        <p><%= projectDetails.description %></p>
+    </div>
 
-    <% if (projectDetails.location) { %>
-        <p>Location: <%= projectDetails.location %></p>
-    <% } %>
+    <div class="detail-section">
+        <h4>Categories</h4>
+        <div class="category-tags">
+            <% categories.forEach(category => { %>
+                <a href="/category/<%= category.category_id %>" class="category-tag"><%= category.name %></a>
+            <% }) %>
+        </div>
+    </div>
 
-    <% if (projectDetails.project_date) { %>
-        <p>Date: <%= new Date(projectDetails.project_date).toLocaleDateString() %></p>
-    <% } %>
-
-    <h3>Categories</h3>
-    <ul>
-        <% categories.forEach(category => { %>
-            <li><a href="/category/<%= category.category_id %>"><%= category.name %></a></li>
-        <% }) %>
-    </ul>
-
-    <% if (user && user.role_name === 'admin') { %>
-        <p><a href="/edit-project/<%= projectDetails.project_id %>">Edit Project</a></p>
-        <p><a href="/assign-categories/<%= projectDetails.project_id %>">Edit Categories</a></p>
-    <% } %>
-    <p><a href="/projects">Back to all projects</a></p>
+    <div class="detail-actions">
+        <% if (user && user.role_name === 'admin') { %>
+            <a href="/edit-project/<%= projectDetails.project_id %>" class="btn-primary">Edit Project</a>
+            <a href="/assign-categories/<%= projectDetails.project_id %>" class="btn-secondary">Edit Categories</a>
+        <% } %>
+        <a href="/projects" class="btn-secondary">Back to all projects</a>
+    </div>
 </main>
 <%- include('partials/footer') %>
