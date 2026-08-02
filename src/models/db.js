@@ -12,13 +12,27 @@ import { Pool } from 'pg';
  * The connection string format is:
  * postgresql://username:password@host:port/database
  */
+// Parse connection string to get individual components
+const dbUrl = process.env.DB_URL;
+
+if (!dbUrl) {
+    throw new Error('DB_URL environment variable is not set');
+}
+
+const parsedUrl = new URL(dbUrl);
+
 const pool = new Pool({
-    connectionString: process.env.DB_URL,
-    ssl: process.env.DB_SSL === 'false'
-        ? false
-        : {
-            rejectUnauthorized: false
-          }
+    host: parsedUrl.hostname,
+    port: parsedUrl.port || 5432,
+    database: parsedUrl.pathname.substring(1),
+    user: parsedUrl.username,
+    password: decodeURIComponent(parsedUrl.password),
+    ssl: {
+        rejectUnauthorized: false
+    },
+    max: 20,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 10000
 });
 
 /**
@@ -51,23 +65,41 @@ if (process.env.NODE_ENV === 'development' && process.env.ENABLE_SQL_LOGGING ===
      */
     db = {
         async query(text, params) {
-            try {
-                const start = Date.now();
-                const res = await pool.query(text, params);
-                const duration = Date.now() - start;
-                console.log('Executed query:', { 
-                    text: text.replace(/\s+/g, ' ').trim(), 
-                    duration: `${duration}ms`, 
-                    rows: res.rowCount 
-                });
-                return res;
-            } catch (error) {
-                console.error('Error in query:', { 
-                    text: text.replace(/\s+/g, ' ').trim(), 
-                    error: error.message 
-                });
-                throw error;
+            const maxRetries = 3;
+            let lastError;
+            
+            for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                try {
+                    const start = Date.now();
+                    const res = await pool.query(text, params);
+                    const duration = Date.now() - start;
+                    console.log('Executed query:', { 
+                        text: text.replace(/\s+/g, ' ').trim(), 
+                        duration: `${duration}ms`, 
+                        rows: res.rowCount 
+                    });
+                    return res;
+                } catch (error) {
+                    lastError = error;
+                    console.error(`Query attempt ${attempt} failed:`, { 
+                        text: text.replace(/\s+/g, ' ').trim(), 
+                        error: error.message 
+                    });
+                    
+                    // If it's a connection error and not the last attempt, retry
+                    if (error.message.includes('Connection terminated') || 
+                        error.message.includes('connect') ||
+                        error.code === 'ECONNRESET') {
+                        if (attempt < maxRetries) {
+                            console.log(`Retrying in 2 seconds... (${attempt}/${maxRetries})`);
+                            await new Promise(resolve => setTimeout(resolve, 2000));
+                            continue;
+                        }
+                    }
+                    throw error;
+                }
             }
+            throw lastError;
         },
 
         async close() {

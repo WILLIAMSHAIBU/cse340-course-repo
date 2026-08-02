@@ -1,3 +1,10 @@
 node_modules/
 .env
 .DS_Store
+check-users.js
+create-admin.js
+reset-database.js
+setup-database.js
+test-database-data.js
+test-user-auth.js
+update-env.js
