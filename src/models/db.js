@@ -107,8 +107,41 @@ if (process.env.NODE_ENV === 'development' && process.env.ENABLE_SQL_LOGGING ===
         }
     };
 } else {
-    // In production, export the pool directly without logging overhead
-    db = pool;
+    /**
+     * In production, we wrap the pool with retry logic but without logging overhead.
+     * This ensures connection reliability in production environments like Render.
+     */
+    db = {
+        async query(text, params) {
+            const maxRetries = 3;
+            let lastError;
+            
+            for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                try {
+                    const res = await pool.query(text, params);
+                    return res;
+                } catch (error) {
+                    lastError = error;
+                    
+                    // If it's a connection error and not the last attempt, retry
+                    if (error.message.includes('Connection terminated') || 
+                        error.message.includes('connect') ||
+                        error.code === 'ECONNRESET') {
+                        if (attempt < maxRetries) {
+                            await new Promise(resolve => setTimeout(resolve, 2000));
+                            continue;
+                        }
+                    }
+                    throw error;
+                }
+            }
+            throw lastError;
+        },
+
+        async close() {
+            await pool.end();
+        }
+    };
 }
 
 /**

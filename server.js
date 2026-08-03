@@ -20,6 +20,9 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// Trust proxy for Render and other cloud platforms
+app.set('trust proxy', 1);
+
 /**
  * Configure Express middleware
  */
@@ -33,7 +36,9 @@ app.use(session({
         maxAge: 60 * 60 * 1000, // Session expires after 1 hour of inactivity
         secure: NODE_ENV === 'production', // Use secure cookies in production
         httpOnly: true, // Prevent XSS attacks
-        sameSite: 'lax' // CSRF protection
+        sameSite: 'lax', // CSRF protection
+        // For Render and other cloud platforms, trust the proxy
+        // This allows the session to work behind Render's load balancer
     }
 }));
 
@@ -114,6 +119,6 @@ app.listen(PORT, async () => {
     console.log(`Environment: ${NODE_ENV}`);
   } catch (error) {
     console.error('Error connecting to the database:', error);
-    console.log('Continuing without database connection for now.');
+    console.log('Server started but database connection may need retries via connection pool.');
   }
 });
